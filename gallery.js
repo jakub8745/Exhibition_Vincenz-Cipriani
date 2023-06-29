@@ -50,13 +50,13 @@ let dY;
 let target = null;
 let timeout = null;
 let lightPosition = new THREE.Vector3();
-const tekstInfo = `<p>Najlepiej oglądać ekspozycję na dużym ekranie (komputer stacjonarny,
-  laptop). Po wnętrzu galerii można poruszać się na kilka sposobów, używając
-  myszki, dżojstika, który znajduje się w lewym dolnym rogu ekranu, używając
-  klawiszy ze strzałkami, albo po podwójnym kliknięciu na podłogę i
-  podążaniu za żółto-niebieską ikonką wskazującą kierunek drogi. Podwójne
-  kliknięcie w wybrany obraz (obiekt) przybliża go na pierwszy plan, ponowne
-  kliknięcie zamyka ono obrazu.  [X]</p>`;
+const tekstInfo = `<p>The exhibition is best viewed on a large screen (desktop computer, laptop). The interior of the gallery can be navigated in a number of ways: with the mouse, the joystick in the bottom left-hand corner of the screen, the arrow keys, or by double-clicking on the floor and following the blue-yellow icon indicating the direction. 
+You can rotate inwards by holding down the left mouse button and moving the mouse. Double click on the selected image (object) to zoom in, single click again to close the window. 
+We hope you enjoy your visit.</br></br>
+Wystawę najlepiej oglądać na dużym ekranie (komputer stacjonarny, laptop). Po wnętrzu galerii można poruszać się na kilka sposobów: używając myszki; dżojstika, który znajduje się w lewym dolnym rogu ekranu; używając klawiszy ze strzałkami; albo po podwójnym kliknięciu na podłogę i podążaniu za żółto-niebieską ikonką wskazującą kierunek. 
+Obracać się we wnętrzu można przez przytrzymanie lewego przycisku myszki i poruszanie nią. Podwójne kliknięcie w wybrane zdjęcie (obiekt) przybliża go, kliknięcie pojedyncze zamyka okno. 
+Życzymy miłego zwiedzania.
+</p>`;
 
 init();
 render();
@@ -109,9 +109,13 @@ function init() {
   }, 50);
 
   const makeTextInfo = () => {
-    document.getElementById("info").style.display = "flex";
+    if (document.getElementById("info").style.display === "none") {
+      document.getElementById("info").style.display = "flex";
 
-    document.getElementById("info").innerHTML = tekstInfo;
+      document.getElementById("info").innerHTML = tekstInfo;
+    } else {
+      document.getElementById("info").style.display = "none";
+    }
   };
 
   //const bgColor = 0x64a8ba;
@@ -189,7 +193,7 @@ function init() {
   stats = new Stats();
   document.body.appendChild(stats.dom);
 */
-  makeTextInfo();
+  // makeTextInfo();
 
   loadColliderEnvironment();
 
@@ -363,22 +367,15 @@ function init() {
   gui.open(false);
   */
 
-  document.getElementById("infoButton").addEventListener("pointerdown", (e) => {
-    if (document.getElementById("info").style.display === "none") {
-      makeTextInfo();
-    } else {
-      //document.getElementById("info").innerText = "";
-      document.getElementById("info").style.display = "none";
-    }
+  const infoButton = document.getElementById("infoButton");
+  infoButton.addEventListener("pointerdown", makeTextInfo);
+  infoButton.addEventListener("pointerover", (e) => {
+    infoButton.style.opacity = 1;
   });
-  document.getElementById("info").addEventListener("pointerdown", (e) => {
-    //console.log(document.getElementById("info"));
-    if (document.getElementById("info").style.display === "none") {
-      makeTextInfo();
-    } else {
-      document.getElementById("info").style.display = "none";
-    }
+  infoButton.addEventListener("pointerout", (e) => {
+    infoButton.style.opacity = 0.3;
   });
+  document.getElementById("info").addEventListener("pointerdown", makeTextInfo);
 
   window.addEventListener("pointerdown", (e) => {
     if (e.target === target) {

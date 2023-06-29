@@ -12,9 +12,9 @@ canvas {
 }
 .open-info-button {
   position: absolute;
-  right: 45%;
-  bottom: 4em;
-  width: 26em;
+  right: 2%;
+  top: 4em;
+  opacity: 0.3;
 }
 
 #info-icon {
@@ -27,7 +27,7 @@ canvas {
   color: white;
   background-color: rgba(159, 159, 159, 0.5);
   text-align: justify;
-  display: flex;
+  display: none;
   justify-content: center;
   padding: 9px;
   left: 10%;
