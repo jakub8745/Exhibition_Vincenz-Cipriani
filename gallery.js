@@ -20,7 +20,7 @@ const params = {
   displayCollider: false,
   displayBVH: false,
   visualizeDepth: 10,
-  gravity: -10,
+  gravity: -30,
   playerSpeed: 3,
   physicsSteps: 5,
   reset: reset,
@@ -50,6 +50,13 @@ let dY;
 let target = null;
 let timeout = null;
 let lightPosition = new THREE.Vector3();
+const tekstInfo = `<p>Najlepiej oglądać ekspozycję na dużym ekranie (komputer stacjonarny,
+  laptop). Po wnętrzu galerii można poruszać się na kilka sposobów, używając
+  myszki, dżojstika, który znajduje się w lewym dolnym rogu ekranu, używając
+  klawiszy ze strzałkami, albo po podwójnym kliknięciu na podłogę i
+  podążaniu za żółto-niebieską ikonką wskazującą kierunek drogi. Podwójne
+  kliknięcie w wybrany obraz (obiekt) przybliża go na pierwszy plan, ponowne
+  kliknięcie zamyka ono obrazu.  [X]</p>`;
 
 init();
 render();
@@ -100,6 +107,10 @@ function init() {
         break;
     }
   }, 50);
+
+  const makeTextInfo = () => {
+    document.getElementById("info").innerHTML = tekstInfo;
+  };
 
   //const bgColor = 0x64a8ba;
 
@@ -172,8 +183,11 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.target.set(0, 4, 0);
   // stats setup
+  /*
   stats = new Stats();
   document.body.appendChild(stats.dom);
+*/
+  makeTextInfo();
 
   loadColliderEnvironment();
 
@@ -251,11 +265,14 @@ function init() {
         viewer.appendChild(viewImage);
 
         // text-on-screen
-        const textOnscreen = document.createElement("div");
-        textOnscreen.id = "text-on-screen";
-        viewer.appendChild(textOnscreen);
+        if (result.object.userData.opis) {
+          const textOnscreen = document.createElement("div");
+          textOnscreen.id = "text-on-screen";
+          viewer.appendChild(textOnscreen);
+
+          textOnscreen.innerText = `${result.object.userData.opis}`;
+        }
         document.body.appendChild(viewer);
-        textOnscreen.innerText = `${result.object.userData.opis}`;
       }
     } else {
       if (document.getElementById("viewer")) {
@@ -265,12 +282,7 @@ function init() {
     }
     // is clicked object smhg a floor?
 
-    result = intersects.find(
-      ({ object }) =>
-        object.name === "Floor" ||
-        object.name === "Schody_1" ||
-        object.name === "Platform"
-    );
+    result = intersects.find(({ object }) => object.name === "Floor");
     // if clicked obj is on 1st plan
     if (result) {
       const index = intersects.indexOf(result);
@@ -307,13 +319,16 @@ function init() {
   const fadeOutEl = (el) => {
     el.style.animation = "fadeOut 2s forwards";
     el.addEventListener("animationend", () => {
-      const els = document.getElementsByClassName("viewer");
+      el.remove();
+      /*
+      const els = document.el; //getElementsByClassName("viewer");
       while (els.length > 0) {
         els[0].remove();
-      }
+      }*/
     });
   };
   // dat.gui
+  /*
   gui = new GUI();
   gui.add(params, "firstPerson").onChange((v) => {
     if (!v) {
@@ -344,6 +359,15 @@ function init() {
 
   gui.add(params, "reset");
   gui.open(false);
+  */
+  document.getElementById("info").addEventListener("pointerdown", (e) => {
+    console.log(document.getElementById("info"));
+    if (document.getElementById("info").innerText === "info") {
+      makeTextInfo();
+    } else {
+      document.getElementById("info").innerText = "info";
+    }
+  });
 
   window.addEventListener("pointerdown", (e) => {
     if (e.target === target) {
@@ -359,6 +383,13 @@ function init() {
         target = null;
         timeout = null;
       }, 500);
+      if (document.getElementById("text-on-screen")) {
+        const el = document.getElementById("text-on-screen");
+        fadeOutEl(el);
+      } else if (document.getElementById("viewer")) {
+        let el = document.getElementById("viewer");
+        fadeOutEl(el);
+      }
     }
   });
 
@@ -659,7 +690,7 @@ function updatePlayer(delta) {
 }
 
 function render() {
-  stats.update();
+  //stats.update();
   TWEEN.update();
   requestAnimationFrame(render);
 

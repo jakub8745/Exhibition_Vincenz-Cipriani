@@ -16,8 +16,11 @@ canvas {
   top: 0;
   width: 100%;
   color: white;
-  text-align: center;
-  padding: 5px 0;
+  /*background-color: rgba(141, 149, 139, 0.463);*/
+  text-align: justify;
+  display: flex;
+  justify-content: center;
+  padding: 2vw;
 }
 
 a {
