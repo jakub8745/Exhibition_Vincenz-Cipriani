@@ -18,11 +18,10 @@ canvas {
 }
 
 #info-icon {
-  height: 3em;
+  height: 2em;
 }
 #info {
   position: absolute;
-  bottom: 11em;
   max-width: 80%;
   color: white;
   background-color: rgba(159, 159, 159, 0.5);
