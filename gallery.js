@@ -109,6 +109,8 @@ function init() {
   }, 50);
 
   const makeTextInfo = () => {
+    document.getElementById("info").style.display = "flex";
+
     document.getElementById("info").innerHTML = tekstInfo;
   };
 
@@ -148,8 +150,8 @@ function init() {
     light.shadow.camera.near = 0.5; // default
     light.shadow.camera.far = 500; // default
 
-    let pointLightHelper = new THREE.PointLightHelper(light, sphereSize);
-    scene.add(pointLightHelper);
+    //let pointLightHelper = new THREE.PointLightHelper(light, sphereSize);
+    //scene.add(pointLightHelper);
   };
 
   //swiatło pierwsze od schoó∑
@@ -162,7 +164,7 @@ function init() {
   makeLight(2, 15, 20, lightPosition.set(5, 0, -7), 0.4);
   makeLight(2, 15, 20, lightPosition.set(6, 0, 1), 0.1);
   // światła ostatnie
-  makeLight(2, 15, 40, lightPosition.set(15, 0, -5), 0.7);
+  makeLight(2, 15, 35, lightPosition.set(15, 0, -5), 0.7);
   makeLight(2, 15, 10, lightPosition.set(13, 0, 5), 0.7);
   //
 
@@ -360,12 +362,21 @@ function init() {
   gui.add(params, "reset");
   gui.open(false);
   */
-  document.getElementById("info").addEventListener("pointerdown", (e) => {
-    console.log(document.getElementById("info"));
-    if (document.getElementById("info").innerText === "info") {
+
+  document.getElementById("infoButton").addEventListener("pointerdown", (e) => {
+    if (document.getElementById("info").style.display === "none") {
       makeTextInfo();
     } else {
-      document.getElementById("info").innerText = "info";
+      //document.getElementById("info").innerText = "";
+      document.getElementById("info").style.display = "none";
+    }
+  });
+  document.getElementById("info").addEventListener("pointerdown", (e) => {
+    //console.log(document.getElementById("info"));
+    if (document.getElementById("info").style.display === "none") {
+      makeTextInfo();
+    } else {
+      document.getElementById("info").style.display = "none";
     }
   });
 
